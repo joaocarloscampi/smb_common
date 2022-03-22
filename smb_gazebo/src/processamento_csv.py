@@ -23,6 +23,68 @@ def convertGazeboToPixel(xPos, yPos):
     y = -(yPos - 30 + 1)/(0.05*2)
     return int(x), int(y)
 
+print("\nObtendo mapa gerado e Segmentando-o...")
+
+imgGray = cv2.imread('mapa_1.pgm')
+fatia = imgGray[1400:2050, 1800:2600]
+
+linha1 = 100
+y1 = 0
+for i in range(len(fatia[linha1])):
+    if fatia[linha1][i][0] == 0:
+        y1 = i
+        break;
+
+linha2 = 630
+y2 = 0
+for i in range(len(fatia[linha2])):
+    if fatia[linha2][i][0] == 0:
+        y2 = i
+        break;
+
+theta = np.arctan2((linha2-linha1), (y2-y1))
+
+cX = 164
+cY = 645
+M = cv2.getRotationMatrix2D((cX, cY), -theta, 1.0)
+
+(h, w) = fatia.shape[:2]
+
+rotated = cv2.warpAffine(fatia, M, (w, h))
+
+treshold = np.zeros((h, w))
+
+for i in range(len(rotated)):
+    for j in range(len(rotated[i])):
+        if rotated[i][j][0] < 206:
+            treshold[i][j] = 0
+        else:
+            treshold[i][j] = 255
+
+final = treshold[86:645, 159:716]
+# cv2.imshow("Segmentada", final)
+# cv2.waitKey(0)
+cv2.imwrite("Segmentada.png", final)
+
+print("Salvo em Segmentada.png")
+
+# DILATAÇÃO DA IMAGEM
+
+print("\nDilatando paredes para margem de segurança...")
+
+img = cv2.imread('Segmentada.png')
+grayImage = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+(thresh, bwIm) = cv2.threshold(grayImage, 253, 255, cv2.THRESH_BINARY_INV)
+
+kernel = np.ones((36, 36), 'uint8')
+dilate_img = cv2.dilate(bwIm, kernel, iterations=1)
+(thresh, bwIm2) = cv2.threshold(dilate_img, 253, 255, cv2.THRESH_BINARY_INV)
+
+
+cv2.imwrite("map.png", bwIm2)
+print("Salvo em map.png")
+
+# WAVEFRONT
 
 img = cv2.imread("map.png")
 
@@ -32,8 +94,8 @@ img_2 = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
 
 imgGray = cv2.resize(imgGray, (0, 0), fx = 0.5, fy = 0.5)
 
-cv2.imshow("Segmentada", imgGray)
-cv2.waitKey(0)
+# cv2.imshow("Segmentada", imgGray)
+# cv2.waitKey(0)
 
 (l1, l2) = imgGray.shape[:2]
 
@@ -54,21 +116,12 @@ iteracao = 0
 xStartGazebo = 13
 yStartGazebo = 6
 
-xStart, yStart = convertGazeboToPixel(xStartGazebo, yStartGazebo)
-
-print(xStart)
-print(yStart)
-
 xEndGazebo = 7
 yEndGazebo = 23
 
-xEnd = 60
-yEnd = 60
+xStart, yStart = convertGazeboToPixel(xStartGazebo, yStartGazebo)
 
 xEnd, yEnd = convertGazeboToPixel(xEndGazebo, yEndGazebo)
-
-print(xEnd)
-print(yEnd)
 
 # Cria vetor nó
 nodes = []
@@ -76,7 +129,7 @@ nodes = []
 # Adiciona final como primeiro no
 nodes = addNode(nodes, xEnd, yEnd, 1)
 
-print("Gerando o mapa... (Isso pode demorar um pouco)")
+print("\nGerando o mapa pelo algoritmo Wavefront... (Isso pode demorar um pouco)")
 
 # while que vai até acabar os nó
 while(len(nodes) > 0):
@@ -195,8 +248,6 @@ for i in range(len(path)):
     y = path[i][1]
     img_2[y][x] = [255,0,0]
 
-print(convertPixelToGazebo(path[0][0], path[0][1]))
-
 pathGazebo = []
 
 for i in range(0, len(path), 5):
@@ -208,19 +259,19 @@ for i in range(0, len(path), 5):
 
     pathGazebo.append([xPath, yPath])
 
-print("Caminho gerado. Salvando arquivo .csv")
-
-cv2.imshow("Segmentada2", img_2)
-cv2.waitKey(0)
+# cv2.imshow("Segmentada2", img_2)
+# cv2.waitKey(0)
 
 #cv2.imshow("Segmentada", imgGray)
 cv2.imwrite("Path.png", img_2)
-#cv2.waitKey(0)
+print("Salvo em Path.png")
 
-print(pathGazebo)
+# print("Path Gerado: ")
+# print(pathGazebo)
+
+print("\nGerando arquivo .csv...")
 
 with open('path.csv', 'w') as f:
-
     # using csv.writer method from CSV package
     write = csv.writer(f)
 
@@ -228,3 +279,5 @@ with open('path.csv', 'w') as f:
 
     write.writerow(cols)
     write.writerows(pathGazebo)
+
+print("Salvo em path.csv")
