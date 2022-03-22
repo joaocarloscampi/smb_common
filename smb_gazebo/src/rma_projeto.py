@@ -33,8 +33,6 @@ objectPath = Path()
 
 # Criação do publisher de velocidade
 pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-# Criação do publisher do Marker verde
-pubMarker = rospy.Publisher('visualization_marker', Marker)
 
 spawnX = 12.82
 spawnY = 6.4125
@@ -130,22 +128,13 @@ def callbackScan(data):
     targetXPos = objectPath.path[objectPath.indexPath][0]
     targetYPos = objectPath.path[objectPath.indexPath][1]
 
-    print("xPos: ", xPos)
-    print("yPos: ", yPos)
-    print("targetXPos: ", targetXPos)
-    print("targetYPos: ", targetYPos)
-
     angle = np.arctan2(targetYPos -yPos, targetXPos - xPos)
-
-    print("angle: ", np.rad2deg(angle))
 
     orientation_list = [data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w]
 
     (roll, pitch, yaw) = euler_from_quaternion (orientation_list)
 
     dist,ang = dist_and_angle(xPos,yPos,targetXPos,targetYPos)
-
-    print('Distancia: ', dist)
 
     e = 0.5
     K = 5
@@ -167,8 +156,19 @@ def callbackScan(data):
             publisherVel([0.5, 0, 0], [0, 0, 0.0])
         else:
             publisherVel([0, 0, 0], [0, 0, K*np.sin(e_ang)])
+
+        print("----------------------------------------------------")
+        print('Caminho: ' , objectPath.indexPath)
+        print("\nRobo X: ", xPos)
+        print("Robo Y: ", yPos)
+        print("\nTarget X: ", targetXPos)
+        print("Target Y: ", targetYPos)
+        print('\nErro angulo: ', np.rad2deg(e_ang))
+        print('Distancia Robo-Target: ', dist)
+
     else:
         publisherVel([0, 0, 0], [0, 0, 0])
+        print("Fim do caminho.")
 
     # Publisher para a posição do marker ser a posição do ponto mais próximo lido
     # publisherMarker(objectPath.path[objectPath.indexPath][0], objectPath.path[objectPath.indexPath][1], 0.8)
@@ -208,7 +208,6 @@ if __name__ == '__main__':
     for i in range(int(tamanho/2)):
         pathGazebo.append([df.iloc[i]['x'], df.iloc[i]['y']])
 
-    print(pathGazebo)
     objectPath.getPath(pathGazebo)
 
     listener()
