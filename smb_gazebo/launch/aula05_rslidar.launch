@@ -150,6 +150,8 @@
 <!-- rviz -->
 <!-- <node type="rviz" name="rviz" pkg="rviz" required="true" args="-d $(find smb_gazebo)/rviz/smb_navigation.rviz"/> -->
 
-<node name="pathFinder" pkg="smb_gazebo" type="rma_projeto.py" output="screen"/>
+<node name="pathFinder" pkg="smb_gazebo" type="rma_projeto.py" output="screen">
+    <param name="path_map"           value="$(find smb_gazebo)/src/path.csv"/>
+</node>
 
 </launch>
