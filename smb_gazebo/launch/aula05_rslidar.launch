@@ -146,6 +146,10 @@
 <arg name="robot_description" default="$(arg robot_description)"/>
 <arg name="enable_ekf" default="$(arg enable_ekf)"/>
 </include>
+
 <!-- rviz -->
-<node type="rviz" name="rviz" pkg="rviz" required="true" args="-d $(find smb_gazebo)/rviz/smb_navigation.rviz"/>
+<!-- <node type="rviz" name="rviz" pkg="rviz" required="true" args="-d $(find smb_gazebo)/rviz/smb_navigation.rviz"/> -->
+
+<node name="pathFinder" pkg="smb_gazebo" type="rma_projeto.py" output="screen"/>
+
 </launch>

@@ -8,7 +8,7 @@ set(PACKAGE_DEPENDENCIES
   rospy
   tf
   geometry_msgs
-  visualization_msgs  
+  visualization_msgs
 )
 
 find_package(catkin REQUIRED
@@ -70,4 +70,8 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 install(DIRECTORY config launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+catkin_install_python(PROGRAMS src/rma_projeto.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
