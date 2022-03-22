@@ -17,17 +17,23 @@ def convertPixelToGazebo(xPixel, yPixel):
     y = 30 - (1 + yPixel*0.05*2)
     return x, y
 
-# spawnX = 12.82
-# spawnY = 6.4125
 
-imgGray = cv2.imread("map.png")
+def convertGazeboToPixel(xPos, yPos):
+    x = (xPos - 1) / (0.05*2)
+    y = -(yPos - 30 + 1)/(0.05*2)
+    return int(x), int(y)
 
-imgGray = cv2.cvtColor(imgGray, cv2.COLOR_BGR2GRAY)
+
+img = cv2.imread("map.png")
+
+imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+img_2 = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
 
 imgGray = cv2.resize(imgGray, (0, 0), fx = 0.5, fy = 0.5)
 
-# cv2.imshow("Segmentada", imgGray)
-# cv2.waitKey(0)
+cv2.imshow("Segmentada", imgGray)
+cv2.waitKey(0)
 
 (l1, l2) = imgGray.shape[:2]
 
@@ -45,19 +51,24 @@ for i in range(l1):
 
 iteracao = 0
 
-# Define inicio
-# xStart = 50
-# yStart = 500
+xStartGazebo = 13
+yStartGazebo = 6
 
-xStart = 120
-yStart = 230
+xStart, yStart = convertGazeboToPixel(xStartGazebo, yStartGazebo)
 
-# Define final
-# xEnd = 120
-# yEnd = 500
+print(xStart)
+print(yStart)
+
+xEndGazebo = 7
+yEndGazebo = 23
 
 xEnd = 60
 yEnd = 60
+
+xEnd, yEnd = convertGazeboToPixel(xEndGazebo, yEndGazebo)
+
+print(xEnd)
+print(yEnd)
 
 # Cria vetor nó
 nodes = []
@@ -179,52 +190,32 @@ while( not (nLocX == xEnd and nLocY == yEnd) and not bNoPath):
         nLocY = listVizinhos[0][1]
         path.append([nLocX, nLocY]);
 
-
-
-# for i in range(len(path)):
-#     print(path[i])
-#     if imgGray[path[i][1]+10][path[i][0]] == 0:
-#         print("entrei1")
-#         newY = path[i][1] - 5
-#         if imgGray[newY][path[i][0]] != 0:
-#             print("entrei2")
-#             path[i][1] = newY
-#
-# for i in range(len(path)):
-#     print(path[i])
-#     if imgGray[path[i][1]-10][path[i][0]] == 0:
-#         print("entrei1")
-#         newY = path[i][1] + 5
-#         if imgGray[newY][path[i][0]] != 0:
-#             print("entrei2")
-#             path[i][1] = newY
-
-
-
 for i in range(len(path)):
     x = path[i][0]
     y = path[i][1]
-    imgGray[y][x] = 150
+    img_2[y][x] = [255,0,0]
 
 print(convertPixelToGazebo(path[0][0], path[0][1]))
-
-
 
 pathGazebo = []
 
 for i in range(0, len(path), 5):
     x = path[i][0]
     y = path[i][1]
-    imgGray[y][x] = 200
+    img_2[y][x] = [0,0,255]
 
     xPath, yPath = convertPixelToGazebo(path[i][0], path[i][1])
 
     pathGazebo.append([xPath, yPath])
 
-print("Caminho gerado. Iniciando movimentação do robô")
+print("Caminho gerado. Salvando arquivo .csv")
 
-cv2.imshow("Segmentada", imgGray)
+cv2.imshow("Segmentada2", img_2)
 cv2.waitKey(0)
+
+#cv2.imshow("Segmentada", imgGray)
+cv2.imwrite("Path.png", img_2)
+#cv2.waitKey(0)
 
 print(pathGazebo)
 
