@@ -3,6 +3,16 @@ import cv2
 import csv
 import pandas as pd
 
+# Posições (x, y) nas unidades do Gazebo para o início do path (spawh do robô)
+
+xStartGazebo = 13
+yStartGazebo = 6
+
+# Posições (x, y) nas unidades do Gazebo para o fim do path
+
+xEndGazebo = 7
+yEndGazebo = 23
+
 def addNode(nodes, x, y, d):
     nodes.append([x, y, d])
     return nodes
@@ -112,12 +122,6 @@ for i in range(l1):
             costmap[i][j] = -1
 
 iteracao = 0
-
-xStartGazebo = 13
-yStartGazebo = 6
-
-xEndGazebo = 7
-yEndGazebo = 23
 
 xStart, yStart = convertGazeboToPixel(xStartGazebo, yStartGazebo)
 
