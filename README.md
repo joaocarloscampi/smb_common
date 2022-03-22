@@ -51,6 +51,6 @@ python3 processamento_csv.py
 ```
 Por fim, basta executar o launch desse pacote:
 ``` sh
-roscd smb_gazebo/src
+roscd smb_gazebo/launch
 roslaunch projeto_rma.launch
 ```
