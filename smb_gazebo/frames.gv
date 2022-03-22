@@ -1,0 +1,18 @@
+digraph G {
+"base_link" -> "base_inertia"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"odom" -> "base_link"[label=" Broadcaster: /ekf_localization\nAverage rate: 45.582\nBuffer length: 4.98\nMost recent transform: 636.181\nOldest transform: 631.201\n"];
+"base_link" -> "imu_link"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "lidar_mount_link"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "rslidar_base_link"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"rslidar_base_link" -> "rslidar"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "top"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "LF_WHEEL"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 50.202\nBuffer length: 4.96\nMost recent transform: 636.181\nOldest transform: 631.221\n"];
+"base_link" -> "LH_WHEEL"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 50.202\nBuffer length: 4.96\nMost recent transform: 636.181\nOldest transform: 631.221\n"];
+"base_link" -> "RF_WHEEL"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 50.202\nBuffer length: 4.96\nMost recent transform: 636.181\nOldest transform: 631.221\n"];
+"base_link" -> "RH_WHEEL"[label=" Broadcaster: /smb_robot_state_publisher\nAverage rate: 50.202\nBuffer length: 4.96\nMost recent transform: 636.181\nOldest transform: 631.221\n"];
+"odom" -> "rslidar_lidar_link"[label=" Broadcaster: /odom_to_map\nAverage rate: 10.196\nBuffer length: 4.904\nMost recent transform: 636.269\nOldest transform: 631.365\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 636.221"[ shape=plaintext ] ;
+}->"odom";
+}
