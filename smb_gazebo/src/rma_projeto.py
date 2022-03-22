@@ -147,11 +147,6 @@ def callbackScan(data):
 
         e_ang = ang - yaw
 
-        print('Erro angulo: ', e_ang)
-        print('Caminho: ' , objectPath.indexPath)
-        print('Orientação: ', yaw)
-        print('Angulo do Alvo:', ang)
-
         if abs(e_ang) < np.deg2rad(5):
             publisherVel([0.5, 0, 0], [0, 0, 0.0])
         else:
