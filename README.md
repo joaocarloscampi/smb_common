@@ -18,12 +18,24 @@ As dependências python são verificadas na etapa de instalação a seguir
 
 ## Instalação
 
-Para a instalação desse pacote, é necessário substituir seu atual diretório smc_common por esse repositório. É recomendado realizar um backup desse diretório para eventualmente voltar em sua versão antiga.
+Para a instalação desse pacote, é necessário criar um novo workspace para a instalação e construção do ambiente de simulação.
 Os passos a seguir realizam a instalação do smb_common do projeto:
 
+Criação do workspace:
 ``` sh
-cd ~/workspace/src
-rm -rf smb_common
+mkdir -p ~/workspace_projeto/src
+cd ~/workspace_projeto/
+catkin_make
+source devel/setup.bash
+catkin init
+catkin clean
+```
+
+Instalação de dependências
+``` sh
+cd ~/workspace_projeto/src
+git clone https://github.com/ros-perception/slam_gmapping.git
+git clone https://github.com/ros-planning/navigation.git
 git clone https://github.com/joaocarloscampi/smb_common
 catkin build
 cd smb_common
