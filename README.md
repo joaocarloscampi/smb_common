@@ -54,3 +54,7 @@ Por fim, basta executar o launch desse pacote:
 roscd smb_gazebo/launch
 roslaunch projeto_rma.launch
 ```
+
+## Vídeo da execução
+
+Para acessar o vídeo da execução do projeto com o robô atingindo o ponto desejado, clique [aqui] (https://drive.google.com/file/d/1W6UDqgpirMCnvRqb7XizbO5vyU9BOG-L/view?usp=sharing).
